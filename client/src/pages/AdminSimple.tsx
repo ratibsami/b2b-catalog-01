@@ -1,8 +1,7 @@
-import { useLocation } from "wouter";
 import { useEffect, useState } from "react";
+import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { 
   LayoutDashboard, 
   Package, 
@@ -23,26 +22,33 @@ import AdminFAQ from "./admin/FAQ";
 export default function AdminSimple() {
   const [location, navigate] = useLocation();
   const [isLoading, setIsLoading] = useState(true);
-  const { data: sessionData } = trpc.adminAuth.checkSession.useQuery();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { data: sessionData, isLoading: sessionLoading } = trpc.adminAuth.checkSession.useQuery();
 
   const logout = trpc.adminAuth.logout.useMutation({
     onSuccess: () => {
       toast.success("خروج موفق");
+      setIsAuthenticated(false);
       navigate("/admin/login");
     },
   });
 
+  // Update authentication state when session data changes
   useEffect(() => {
-    setIsLoading(false);
-  }, [sessionData]);
+    if (!sessionLoading) {
+      setIsAuthenticated(sessionData?.isAuthenticated || false);
+      setIsLoading(false);
+    }
+  }, [sessionData, sessionLoading]);
 
+  // Redirect to login if not authenticated
   useEffect(() => {
-    if (!isLoading && !sessionData?.isAuthenticated) {
+    if (!isLoading && !isAuthenticated) {
       navigate("/admin/login");
     }
-  }, [isLoading, sessionData?.isAuthenticated, navigate]);
+  }, [isLoading, isAuthenticated, navigate]);
 
-  if (isLoading || !sessionData?.isAuthenticated) {
+  if (isLoading || !isAuthenticated) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -99,25 +105,20 @@ export default function AdminSimple() {
           })}
         </nav>
 
-        <div className="border-t border-border pt-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => logout.mutateAsync()}
-            disabled={logout.isPending}
-            className="w-full"
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            خروج
-          </Button>
-        </div>
+        <Button
+          variant="outline"
+          className="w-full justify-start gap-2"
+          onClick={() => logout.mutate()}
+          disabled={logout.isPending}
+        >
+          <LogOut className="h-4 w-4" />
+          خروج
+        </Button>
       </div>
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
-        <div className="p-6">
-          {renderPage()}
-        </div>
+        {renderPage()}
       </div>
     </div>
   );
