@@ -1,0 +1,9 @@
+{
+  "query": "DELETE FROM settings WHERE `key` = 'logo_url'; INSERT INTO settings (`key`, `value`) VALUES ('logo_url', 'https://d2xsxph8kpxj0f.cloudfront.net/310519663355544748/YE3BoRZtdDkUr36qDCVcUW/savin-logo_99301df6.svg');",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user dgFsm6fjHJfbrt5.b723284ecd01 --database YE3BoRZtdDkUr36qDCVcUW --execute DELETE FROM settings WHERE `key` = 'logo_url'; INSERT INTO settings (`key`, `value`) VALUES ('logo_url', 'https://d2xsxph8kpxj0f.cloudfront.net/310519663355544748/YE3BoRZtdDkUr36qDCVcUW/savin-logo_99301df6.svg');",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 70
+}
