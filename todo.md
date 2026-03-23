@@ -90,3 +90,8 @@
 
 ## Current Issues
 - [x] Admin login page gets stuck after entering credentials - page doesn't navigate to admin dashboard
+
+## Image Upload Issues
+- [ ] Fix category image upload - images not persisting to database/storage
+- [ ] Implement proper cloud storage integration for category images
+- [ ] Update category create/update endpoints to handle image uploads

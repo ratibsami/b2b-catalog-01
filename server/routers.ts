@@ -7,6 +7,7 @@ import * as db from "./db";
 import { TRPCError } from "@trpc/server";
 import { notifyOwner } from "./_core/notification";
 import crypto from "crypto";
+import { storagePut } from "./storage";
 
 // ========== Admin Procedure ==========
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -131,6 +132,31 @@ export const appRouter = router({
       .input(z.object({ id: z.number() }))
       .mutation(async ({ input }) => {
         return db.deleteCategory(input.id);
+      }),
+
+    uploadImage: adminProcedure
+      .input(
+        z.object({
+          filename: z.string(),
+          base64: z.string(),
+        })
+      )
+      .mutation(async ({ input }) => {
+        try {
+          const base64Data = input.base64.split(",")[1] || input.base64;
+          const buffer = Buffer.from(base64Data, "base64");
+          const fileKey = `categories/${Date.now()}-${input.filename}`;
+          const result = await storagePut(fileKey, buffer, "image/jpeg");
+          return {
+            url: result.url,
+            key: result.key,
+          };
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Failed to upload image",
+          });
+        }
       }),
   }),
 

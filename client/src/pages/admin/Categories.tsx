@@ -17,14 +17,15 @@ export default function AdminCategories() {
     descriptionEn: "",
     descriptionFa: "",
     slug: "",
-    image: "",
+    bannerUrl: "",
+    bannerKey: "",
   });
 
   const { data: categories, isLoading, refetch } = trpc.categories.all.useQuery();
   const createCategory = trpc.categories.create.useMutation({
     onSuccess: () => {
       toast.success("دسته‌بندی با موفقیت ایجاد شد");
-      setFormData({ nameEn: "", nameFa: "", descriptionEn: "", descriptionFa: "", slug: "", image: "" });
+      setFormData({ nameEn: "", nameFa: "", descriptionEn: "", descriptionFa: "", slug: "", bannerUrl: "", bannerKey: "" });
       setImagePreview(null);
       setIsCreating(false);
       refetch();
@@ -40,16 +41,34 @@ export default function AdminCategories() {
     onError: (error) => toast.error("خطا: " + error.message),
   });
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const uploadImage = trpc.categories.uploadImage.useMutation();
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = reader.result as string;
-        setImagePreview(result);
-        setFormData({ ...formData, image: result });
-      };
-      reader.readAsDataURL(file);
+      try {
+        setIsUploadingImage(true);
+        const reader = new FileReader();
+        reader.onload = async () => {
+          const base64 = reader.result as string;
+          setImagePreview(base64);
+          
+          // Upload to cloud storage
+          const result = await uploadImage.mutateAsync({
+            filename: file.name,
+            base64: base64,
+          });
+          
+          setFormData({ ...formData, bannerUrl: result.url, bannerKey: result.key });
+          toast.success("تصویر با موفقیت آپلود شد");
+        };
+        reader.readAsDataURL(file);
+      } catch (error) {
+        toast.error("خطا در آپلود تصویر");
+      } finally {
+        setIsUploadingImage(false);
+      }
     }
   };
 
@@ -99,6 +118,7 @@ export default function AdminCategories() {
                       type="file"
                       accept="image/*"
                       onChange={handleImageChange}
+                      disabled={isUploadingImage}
                       className="hidden"
                     />
                   </label>
@@ -110,7 +130,7 @@ export default function AdminCategories() {
                       type="button"
                       onClick={() => {
                         setImagePreview(null);
-                        setFormData({ ...formData, image: "" });
+                        setFormData({ ...formData, bannerUrl: "", bannerKey: "" });
                       }}
                       className="absolute top-1 right-1 bg-destructive text-white p-1 rounded-full hover:bg-destructive/90"
                     >
@@ -184,7 +204,7 @@ export default function AdminCategories() {
                 onClick={() => {
                   setIsCreating(false);
                   setImagePreview(null);
-                  setFormData({ nameEn: "", nameFa: "", descriptionEn: "", descriptionFa: "", slug: "", image: "" });
+                  setFormData({ nameEn: "", nameFa: "", descriptionEn: "", descriptionFa: "", slug: "", bannerUrl: "", bannerKey: "" });
                 }}
                 size="lg"
               >
