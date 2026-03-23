@@ -15,13 +15,11 @@ export default function AdminLogin() {
 
   const login = trpc.adminAuth.login.useMutation({
     onSuccess: async () => {
-      // Invalidate the checkSession query to force a refresh
+      // Immediately invalidate and navigate
       await utils.adminAuth.checkSession.invalidate();
       toast.success("خوش آمدید به پنل ادمین");
-      // Add a small delay to ensure cookie is set
-      setTimeout(() => {
-        navigate("/admin");
-      }, 300);
+      // Navigate immediately without delay
+      navigate("/admin");
     },
     onError: (error) => {
       toast.error("خطا: " + error.message);

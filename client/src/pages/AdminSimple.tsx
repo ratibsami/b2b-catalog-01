@@ -22,33 +22,34 @@ import AdminFAQ from "./admin/FAQ";
 export default function AdminSimple() {
   const [location, navigate] = useLocation();
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const { data: sessionData, isLoading: sessionLoading } = trpc.adminAuth.checkSession.useQuery();
+  const { data: sessionData, isLoading: sessionLoading, refetch } = trpc.adminAuth.checkSession.useQuery(undefined, {
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+  });
 
   const logout = trpc.adminAuth.logout.useMutation({
     onSuccess: () => {
       toast.success("خروج موفق");
-      setIsAuthenticated(false);
       navigate("/admin/login");
     },
   });
 
-  // Update authentication state when session data changes
+  // Update loading state when session data is available
   useEffect(() => {
     if (!sessionLoading) {
-      setIsAuthenticated(sessionData?.isAuthenticated || false);
       setIsLoading(false);
     }
-  }, [sessionData, sessionLoading]);
+  }, [sessionLoading]);
 
   // Redirect to login if not authenticated
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if (!isLoading && !sessionData?.isAuthenticated) {
       navigate("/admin/login");
     }
-  }, [isLoading, isAuthenticated, navigate]);
+  }, [isLoading, sessionData?.isAuthenticated, navigate]);
 
-  if (isLoading || !isAuthenticated) {
+  // Show loading while checking session
+  if (isLoading || sessionLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -57,6 +58,11 @@ export default function AdminSimple() {
         </div>
       </div>
     );
+  }
+
+  // Redirect if not authenticated
+  if (!sessionData?.isAuthenticated) {
+    return null;
   }
 
   const navItems = [
