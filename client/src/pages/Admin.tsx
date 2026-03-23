@@ -1,6 +1,6 @@
-import { useAuth } from "@/_core/hooks/useAuth";
 import { useLocation } from "wouter";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { trpc } from "@/lib/trpc";
 import DashboardLayout from "@/components/DashboardLayout";
 import AdminDashboard from "./admin/Dashboard";
 import AdminProducts from "./admin/Products";
@@ -10,16 +10,15 @@ import AdminContent from "./admin/Content";
 import AdminFAQ from "./admin/FAQ";
 
 export default function Admin() {
-  const { user, isAuthenticated, loading } = useAuth();
   const [location, navigate] = useLocation();
+  const [isLoading, setIsLoading] = useState(true);
+  const { data: sessionData } = trpc.adminAuth.checkSession.useQuery();
 
   useEffect(() => {
-    if (!loading && (!isAuthenticated || user?.role !== "admin")) {
-      navigate("/");
-    }
-  }, [isAuthenticated, loading, user, navigate]);
+    setIsLoading(false);
+  }, [sessionData]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -30,7 +29,8 @@ export default function Admin() {
     );
   }
 
-  if (!isAuthenticated || user?.role !== "admin") {
+  if (!sessionData?.isAuthenticated) {
+    navigate("/admin/login");
     return null;
   }
 

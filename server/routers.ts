@@ -6,6 +6,7 @@ import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import * as db from "./db";
 import { TRPCError } from "@trpc/server";
 import { notifyOwner } from "./_core/notification";
+import crypto from "crypto";
 
 // ========== Admin Procedure ==========
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -25,6 +26,52 @@ export const appRouter = router({
       const cookieOptions = getSessionCookieOptions(ctx.req);
       ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
       return { success: true } as const;
+    }),
+  }),
+
+  // ========== Admin Auth Routes ==========
+  adminAuth: router({
+    login: publicProcedure
+      .input(
+        z.object({
+          username: z.string().min(1),
+          password: z.string().min(1),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
+        const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
+
+        if (input.username !== ADMIN_USERNAME || input.password !== ADMIN_PASSWORD) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Invalid credentials",
+          });
+        }
+
+        const sessionToken = crypto.randomBytes(32).toString("hex");
+        const cookieOptions = getSessionCookieOptions(ctx.req);
+        ctx.res.cookie("adminSession", sessionToken, {
+          ...cookieOptions,
+          maxAge: 24 * 60 * 60 * 1000,
+        });
+
+        return { success: true, token: sessionToken };
+      }),
+
+    logout: publicProcedure.mutation(({ ctx }) => {
+      ctx.res.clearCookie("adminSession", {
+        path: "/",
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      });
+      return { success: true };
+    }),
+
+    checkSession: publicProcedure.query(({ ctx }) => {
+      const adminSession = ctx.req.cookies?.adminSession;
+      return { isAuthenticated: !!adminSession };
     }),
   }),
 
