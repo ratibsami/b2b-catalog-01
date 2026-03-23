@@ -86,3 +86,4 @@
 - [x] Fix admin panel 404 error when accessing /admin/categories and other sub-pages
 - [x] Remove "پنل ادمین" button from header navigation
 - [x] Ensure admin pages render correctly after login
+- [x] Fix missing useState import in admin pages
