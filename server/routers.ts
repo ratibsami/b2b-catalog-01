@@ -50,9 +50,12 @@ export const appRouter = router({
         }
 
         const sessionToken = crypto.randomBytes(32).toString("hex");
-        const cookieOptions = getSessionCookieOptions(ctx.req);
+        // Use consistent cookie options for admin session
         ctx.res.cookie("adminSession", sessionToken, {
-          ...cookieOptions,
+          httpOnly: true,
+          secure: true,
+          sameSite: "lax",
+          path: "/",
           maxAge: 24 * 60 * 60 * 1000,
         });
 
@@ -60,11 +63,12 @@ export const appRouter = router({
       }),
 
     logout: publicProcedure.mutation(({ ctx }) => {
+      // Use same options as login to ensure cookie is properly cleared
       ctx.res.clearCookie("adminSession", {
-        path: "/",
         httpOnly: true,
         secure: true,
-        sameSite: "none",
+        sameSite: "lax",
+        path: "/",
       });
       return { success: true };
     }),
