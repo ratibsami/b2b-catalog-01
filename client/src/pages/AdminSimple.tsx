@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { 
   LayoutDashboard, 
   Package, 
@@ -9,7 +10,9 @@ import {
   MessageSquare, 
   FileText, 
   HelpCircle, 
-  LogOut
+  LogOut,
+  Lock,
+  Loader2
 } from "lucide-react";
 import { toast } from "sonner";
 import AdminDashboard from "./admin/Dashboard";
@@ -21,13 +24,56 @@ import AdminFAQ from "./admin/FAQ";
 
 export default function AdminSimple() {
   const [location, navigate] = useLocation();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  // Check if user has admin session in localStorage
+  useEffect(() => {
+    const adminSession = localStorage.getItem("adminSession");
+    if (adminSession) {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   const logout = trpc.adminAuth.logout.useMutation({
     onSuccess: () => {
+      localStorage.removeItem("adminSession");
+      setIsAuthenticated(false);
+      setPassword("");
       toast.success("خروج موفق");
       navigate("/");
     },
   });
+
+  const loginMutation = trpc.adminAuth.login.useMutation({
+    onSuccess: (result) => {
+      localStorage.setItem("adminSession", result.token);
+      setIsAuthenticated(true);
+      setPassword("");
+      toast.success("ورود موفق");
+    },
+    onError: () => {
+      toast.error("رمز عبور نادرست است");
+      setPassword("");
+    },
+  });
+
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!password.trim()) {
+      toast.error("لطفاً رمز عبور را وارد کنید");
+      return;
+    }
+
+    setIsVerifying(true);
+    await loginMutation.mutateAsync({ password });
+    setIsVerifying(false);
+  };
+
+  const handleLogout = () => {
+    logout.mutate();
+  };
 
   const navItems = [
     { label: "داشبورد", path: "/admin", icon: LayoutDashboard },
@@ -47,6 +93,58 @@ export default function AdminSimple() {
     if (location.startsWith("/admin/faq")) return <AdminFAQ />;
     return <AdminDashboard />;
   };
+
+  // Password Protection Modal
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5 flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          <div className="bg-card border border-border rounded-2xl shadow-2xl p-8">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accent/10 mb-4">
+                <Lock className="h-8 w-8 text-accent" />
+              </div>
+              <h1 className="text-2xl font-bold gradient-text mb-2">پنل ادمین</h1>
+              <p className="text-sm text-muted-foreground">لطفاً رمز عبور را وارد کنید</p>
+            </div>
+
+            {/* Password Form */}
+            <form onSubmit={handlePasswordSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">رمز عبور</label>
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="رمز عبور را وارد کنید"
+                  disabled={isVerifying}
+                  className="h-11 text-lg"
+                  autoFocus
+                />
+              </div>
+
+              <Button
+                type="submit"
+                disabled={isVerifying || !password.trim() || loginMutation.isPending}
+                className="w-full h-11 text-base"
+              >
+                {(isVerifying || loginMutation.isPending) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isVerifying || loginMutation.isPending ? "در حال تحقق..." : "ورود"}
+              </Button>
+            </form>
+
+            {/* Security Notice */}
+            <div className="mt-6 p-4 bg-accent/5 border border-accent/20 rounded-lg">
+              <p className="text-xs text-muted-foreground text-center">
+                این پنل محدود به مدیران است. دسترسی غیرمجاز ممنوع است.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -78,7 +176,7 @@ export default function AdminSimple() {
         <Button
           variant="outline"
           className="w-full justify-start gap-2"
-          onClick={() => logout.mutate()}
+          onClick={handleLogout}
           disabled={logout.isPending}
         >
           <LogOut className="h-4 w-4" />
@@ -88,7 +186,9 @@ export default function AdminSimple() {
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
-        {renderPage()}
+        <div className="p-8">
+          {renderPage()}
+        </div>
       </div>
     </div>
   );
