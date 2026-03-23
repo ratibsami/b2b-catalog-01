@@ -14,9 +14,12 @@ export default function Home() {
       {/* Navigation */}
       <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/95 backdrop-blur-sm">
         <div className="container flex items-center justify-between py-4">
-          <div className="flex items-center gap-2">
-            <Package className="h-6 w-6 text-accent" />
-            <span className="text-xl font-bold gradient-text">کاتالوگ B2B</span>
+          <div className="flex items-center gap-3">
+            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663355544748/YE3BoRZtdDkUr36qDCVcUW/savin-logo_26a970c1.svg" alt="Savin Global Trade" className="h-8 w-8" />
+            <div className="flex flex-col">
+              <span className="text-lg font-bold gradient-text">Savin Global Trade</span>
+              <span className="text-xs text-muted-foreground">کاتالوگ B2B</span>
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <Link href="/catalog" className="text-sm hover:text-accent transition">
@@ -41,8 +44,11 @@ export default function Home() {
         <div className="container relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-slide-up">
-              پلتفرم <span className="gradient-text">کاتالوگ B2B</span> حرفه‌ای
+              <span className="gradient-text">Savin Global Trade</span>
             </h1>
+            <p className="text-2xl md:text-3xl font-semibold mb-6 text-muted-foreground animate-slide-up">
+              پلتفرم کاتالوگ B2B حرفه‌ای
+            </p>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 animate-slide-up">
               راه‌حل جامع برای مدیریت محصولات و ارتباط با مشتریان تجاری. دسترسی آسان، قیمت‌گذاری شفاف، و پشتیبانی 24/7.
             </p>

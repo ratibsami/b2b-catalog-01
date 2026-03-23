@@ -72,10 +72,14 @@ export default function Catalog() {
       {/* Header */}
       <div className="border-b border-border/50 bg-card/30 py-8">
         <div className="container">
-          <div className="flex items-center gap-2 mb-4">
-            <Package className="h-6 w-6 text-accent" />
+          <div className="flex items-center gap-3 mb-4">
+            <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition">
+              <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663355544748/YE3BoRZtdDkUr36qDCVcUW/savin-logo_26a970c1.svg" alt="Savin Global Trade" className="h-6 w-6" />
+              <span className="text-sm font-semibold gradient-text">Savin</span>
+            </Link>
+            <span className="text-muted-foreground">/</span>
             <Link href="/" className="text-muted-foreground hover:text-accent transition">
-              خانه
+              ابتدا
             </Link>
             <ArrowRight className="h-4 w-4 text-muted-foreground" />
             <span className="text-foreground">کاتالوگ محصولات</span>

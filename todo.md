@@ -109,3 +109,11 @@
 - [x] Create admin password verification endpoint
 - [x] Store admin session in localStorage after password verification
 - [x] Display password modal on admin page load if session not verified
+
+
+## Branding Updates
+- [x] Add Savin Global Trade logo to header
+- [x] Update business name throughout website
+- [x] Add logo to admin panel header
+- [ ] Update favicon with logo
+- [ ] Add logo to footer
