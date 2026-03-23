@@ -33,28 +33,25 @@ function createLoginContext(): { ctx: TrpcContext; cookies: Record<string, strin
 }
 
 describe("adminAuth.login", () => {
-  it("should reject invalid credentials", async () => {
+  it("should reject invalid password", async () => {
     const { ctx } = createLoginContext();
     const caller = appRouter.createCaller(ctx);
 
     try {
       await caller.adminAuth.login({
-        username: "wronguser",
         password: "wrongpass",
       });
       expect.fail("Should have thrown an error");
     } catch (error: any) {
       expect(error.code).toBe("UNAUTHORIZED");
-      expect(error.message).toContain("Invalid credentials");
     }
   });
 
-  it("should accept valid credentials and set session cookie", async () => {
+  it("should accept valid password and set session cookie", async () => {
     const { ctx, cookies } = createLoginContext();
     const caller = appRouter.createCaller(ctx);
 
     const result = await caller.adminAuth.login({
-      username: process.env.ADMIN_USERNAME || "admin",
       password: process.env.ADMIN_PASSWORD || "admin123",
     });
 
@@ -69,7 +66,6 @@ describe("adminAuth.login", () => {
 
     // Login first
     await caller.adminAuth.login({
-      username: process.env.ADMIN_USERNAME || "admin",
       password: process.env.ADMIN_PASSWORD || "admin123",
     });
 
@@ -85,7 +81,6 @@ describe("adminAuth.login", () => {
 
     // Login
     await caller.adminAuth.login({
-      username: process.env.ADMIN_USERNAME || "admin",
       password: process.env.ADMIN_PASSWORD || "admin123",
     });
 

@@ -34,18 +34,16 @@ export const appRouter = router({
     login: publicProcedure
       .input(
         z.object({
-          username: z.string().min(1),
           password: z.string().min(1),
         })
       )
       .mutation(async ({ input, ctx }) => {
-        const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
         const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
 
-        if (input.username !== ADMIN_USERNAME || input.password !== ADMIN_PASSWORD) {
+        if (input.password !== ADMIN_PASSWORD) {
           throw new TRPCError({
             code: "UNAUTHORIZED",
-            message: "Invalid credentials",
+            message: "رمز عبور نادرست است",
           });
         }
 
