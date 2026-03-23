@@ -11,9 +11,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Package, Search, ArrowRight, Image as ImageIcon } from "lucide-react";
+import { Package, Search, ArrowRight, Image as ImageIcon, Menu, X } from "lucide-react";
 
 export default function Catalog() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [priceFilter, setPriceFilter] = useState<string>("all");
@@ -72,23 +73,67 @@ export default function Catalog() {
       {/* Header */}
       <div className="border-b border-border/50 bg-card/30 py-8">
         <div className="container">
-          <div className="flex items-center gap-3 mb-4">
-            <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition">
-              <span className="text-sm font-semibold gradient-text">Savin</span>
-            </Link>
-            <span className="text-muted-foreground">/</span>
-            <Link href="/" className="text-muted-foreground hover:text-accent transition">
-              ابتدا
-            </Link>
-            <ArrowRight className="h-4 w-4 text-muted-foreground" />
-            <span className="text-foreground">کاتالوگ محصولات</span>
+          <div className="flex items-center justify-between gap-3 mb-4">
+            <div className="flex items-center gap-3">
+              <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition">
+                <span className="text-xs md:text-sm font-semibold gradient-text">Savin</span>
+              </Link>
+              <span className="text-muted-foreground hidden md:inline">/</span>
+              <Link href="/" className="text-muted-foreground hover:text-accent transition hidden md:inline">
+                ابتدا
+              </Link>
+              <ArrowRight className="h-4 w-4 text-muted-foreground hidden md:inline" />
+              <span className="text-foreground hidden md:inline">کاتالوگ محصولات</span>
+            </div>
+            <button
+              className="md:hidden p-2 hover:bg-accent/10 rounded-lg transition"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold">کاتالوگ محصولات</h1>
-          <p className="text-muted-foreground mt-2">
+          <h1 className="text-2xl md:text-4xl font-bold">کاتالوگ محصولات</h1>
+          <p className="text-muted-foreground mt-2 text-sm md:text-base">
             تمام محصولات و خدمات ما را کاوش کنید
           </p>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-b border-border/50 bg-background/95">
+          <div className="container py-4 space-y-3">
+            <Link
+              href="/catalog"
+              className="block text-sm hover:text-accent transition py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              کاتالوگ
+            </Link>
+            <Link
+              href="/about"
+              className="block text-sm hover:text-accent transition py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              درباره ما
+            </Link>
+            <Link
+              href="/faq"
+              className="block text-sm hover:text-accent transition py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              سوالات متداول
+            </Link>
+            <Link
+              href="/contact"
+              className="block text-sm hover:text-accent transition py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              تماس
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Categories Section */}
       {categories && categories.length > 0 && (

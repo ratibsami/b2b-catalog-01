@@ -3,10 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Zap, Shield, TrendingUp, Users, Package, Headphones } from "lucide-react";
+import { ArrowLeft, Zap, Shield, TrendingUp, Users, Package, Headphones, Menu, X } from "lucide-react";
 import { getLoginUrl } from "@/const";
+import { useState } from "react";
 
 export default function Home() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { data: categories, isLoading: categoriesLoading } = trpc.categories.list.useQuery();
 
   return (
@@ -16,11 +18,13 @@ export default function Home() {
         <div className="container flex items-center justify-between py-4">
           <div className="flex items-center gap-3">
             <div className="flex flex-col">
-              <span className="text-lg font-bold gradient-text">Savin Global Trade</span>
+              <span className="text-sm md:text-lg font-bold gradient-text">Savin Global Trade</span>
               <span className="text-xs text-muted-foreground">کاتالوگ B2B</span>
             </div>
           </div>
-          <div className="flex items-center gap-4">
+
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center gap-4">
             <Link href="/catalog" className="text-sm hover:text-accent transition">
               محصولات
             </Link>
@@ -34,7 +38,51 @@ export default function Home() {
               تماس
             </Link>
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-2 hover:bg-accent/10 rounded-lg transition"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-border/50 bg-background/95">
+            <div className="container py-4 space-y-3">
+              <Link
+                href="/catalog"
+                className="block text-sm hover:text-accent transition py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                محصولات
+              </Link>
+              <Link
+                href="/about"
+                className="block text-sm hover:text-accent transition py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                درباره ما
+              </Link>
+              <Link
+                href="/faq"
+                className="block text-sm hover:text-accent transition py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                سوالات متداول
+              </Link>
+              <Link
+                href="/contact"
+                className="block text-sm hover:text-accent transition py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                تماس
+              </Link>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}
@@ -42,7 +90,6 @@ export default function Home() {
         <div className="gradient-bg absolute inset-0 opacity-20" />
         <div className="container relative z-10">
           <div className="max-w-3xl mx-auto text-center">
-
             <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-slide-up">
               <span className="gradient-text">Savin Global Trade</span>
             </h1>

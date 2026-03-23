@@ -130,3 +130,6 @@
 - [x] Write tests for logo upload functionality
 - [x] Remove logo images from all pages (display name only)
 - [x] Remove team section from About page
+- [x] Add hamburger menu to Home page for mobile
+- [x] Add hamburger menu to Catalog page for mobile
+- [x] Make company name smaller on mobile
