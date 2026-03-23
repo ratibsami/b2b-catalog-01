@@ -11,7 +11,6 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import FAQ from "./pages/FAQ";
 import AdminSimple from "./pages/AdminSimple";
-import AdminLogin from "./pages/AdminLogin";
 
 function Router() {
   return (
@@ -22,7 +21,6 @@ function Router() {
       <Route path="/contact" component={Contact} />
       <Route path="/about" component={About} />
       <Route path="/faq" component={FAQ} />
-      <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin" component={AdminSimple} />
       <Route path="/admin/products" component={AdminSimple} />
       <Route path="/admin/categories" component={AdminSimple} />

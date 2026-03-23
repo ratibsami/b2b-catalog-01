@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
@@ -21,49 +21,13 @@ import AdminFAQ from "./admin/FAQ";
 
 export default function AdminSimple() {
   const [location, navigate] = useLocation();
-  const [isLoading, setIsLoading] = useState(true);
-  const { data: sessionData, isLoading: sessionLoading, refetch } = trpc.adminAuth.checkSession.useQuery(undefined, {
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-  });
 
   const logout = trpc.adminAuth.logout.useMutation({
     onSuccess: () => {
       toast.success("خروج موفق");
-      navigate("/admin/login");
+      navigate("/");
     },
   });
-
-  // Update loading state when session data is available
-  useEffect(() => {
-    if (!sessionLoading) {
-      setIsLoading(false);
-    }
-  }, [sessionLoading]);
-
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!isLoading && !sessionData?.isAuthenticated) {
-      navigate("/admin/login");
-    }
-  }, [isLoading, sessionData?.isAuthenticated, navigate]);
-
-  // Show loading while checking session
-  if (isLoading || sessionLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto mb-4" />
-          <p className="text-muted-foreground">در حال بارگذاری...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Redirect if not authenticated
-  if (!sessionData?.isAuthenticated) {
-    return null;
-  }
 
   const navItems = [
     { label: "داشبورد", path: "/admin", icon: LayoutDashboard },
