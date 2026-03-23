@@ -92,6 +92,13 @@
 - [x] Admin login page gets stuck after entering credentials - page doesn't navigate to admin dashboard
 
 ## Image Upload Issues
-- [ ] Fix category image upload - images not persisting to database/storage
-- [ ] Implement proper cloud storage integration for category images
-- [ ] Update category create/update endpoints to handle image uploads
+- [x] Fix category image upload - images not persisting to database/storage
+- [x] Implement proper cloud storage integration for category images
+- [x] Update category create/update endpoints to handle image uploads
+
+## Product Image & Video Upload
+- [x] Add uploadProductMedia endpoint to products router (reuses categories uploadImage)
+- [x] Update Products admin page with card-based UI for products
+- [x] Add image upload with preview in Products admin page
+- [x] Add optional video upload support for products
+- [ ] Display products with images and video thumbnails on public catalog
