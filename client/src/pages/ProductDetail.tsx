@@ -171,13 +171,13 @@ export default function ProductDetail() {
                     درخواست قیمت
                   </Button>
                 </Link>
-                <a href="https://wa.me/989123456789" target="_blank" rel="noopener noreferrer">
+                <a href="https://wa.me/8613012705854" target="_blank" rel="noopener noreferrer">
                   <Button size="lg" variant="outline" className="w-full">
                     <Phone className="mr-2 h-4 w-4" />
                     واتس‌اپ
                   </Button>
                 </a>
-                <a href="mailto:info@example.com">
+                <a href="mailto:ratibsami360@gmail.com">
                   <Button size="lg" variant="outline" className="w-full">
                     <Mail className="mr-2 h-4 w-4" />
                     ایمیل

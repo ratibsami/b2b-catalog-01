@@ -90,10 +90,10 @@ export default function Contact() {
                     <div>
                       <h3 className="font-bold mb-2">تلفن</h3>
                       <a
-                        href="tel:+989123456789"
+                        href="tel:+8613012705854"
                         className="text-muted-foreground hover:text-accent transition"
                       >
-                        +98 912 345 6789
+                        +86 130 1270 5854
                       </a>
                     </div>
                   </div>
@@ -106,10 +106,10 @@ export default function Contact() {
                     <div>
                       <h3 className="font-bold mb-2">ایمیل</h3>
                       <a
-                        href="mailto:info@example.com"
+                        href="mailto:ratibsami360@gmail.com"
                         className="text-muted-foreground hover:text-accent transition"
                       >
-                        info@example.com
+                        ratibsami360@gmail.com
                       </a>
                     </div>
                   </div>
@@ -121,18 +121,18 @@ export default function Contact() {
                     <MapPin className="h-6 w-6 text-accent flex-shrink-0 mt-1" />
                     <div>
                       <h3 className="font-bold mb-2">آدرس</h3>
-                      <p className="text-muted-foreground">تهران، ایران</p>
+                      <p className="text-muted-foreground">شنجزن - چین</p>
                     </div>
                   </div>
                 </Card>
 
                 {/* WhatsApp */}
-                <a
-                  href="https://wa.me/989123456789"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                >
+                  <a
+                    href="https://wa.me/8613012705854"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
                   <Button variant="outline" className="w-full justify-start">
                     <Phone className="mr-2 h-4 w-4" />
                     چت در واتس‌اپ

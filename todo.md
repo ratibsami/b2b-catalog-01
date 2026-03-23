@@ -133,3 +133,6 @@
 - [x] Add hamburger menu to Home page for mobile
 - [x] Add hamburger menu to Catalog page for mobile
 - [x] Make company name smaller on mobile
+- [x] Update phone number to +8613012705854
+- [x] Update email to ratibsami360@gmail.com
+- [x] Update address to شنجزن - چین
