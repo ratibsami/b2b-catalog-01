@@ -8,8 +8,6 @@ import { getLoginUrl } from "@/const";
 
 export default function Home() {
   const { data: categories, isLoading: categoriesLoading } = trpc.categories.list.useQuery();
-  const { data: logoSetting } = trpc.settings.get.useQuery({ key: "logo_url" });
-  const logoUrl = logoSetting?.value || "https://d2xsxph8kpxj0f.cloudfront.net/310519663355544748/YE3BoRZtdDkUr36qDCVcUW/savin-logo_41b96128.svg";
 
   return (
     <div className="min-h-screen bg-background">
@@ -17,7 +15,6 @@ export default function Home() {
       <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/95 backdrop-blur-sm">
         <div className="container flex items-center justify-between py-4">
           <div className="flex items-center gap-3">
-            <img src={logoUrl} alt="Savin Global Trade" className="h-8 w-8" />
             <div className="flex flex-col">
               <span className="text-lg font-bold gradient-text">Savin Global Trade</span>
               <span className="text-xs text-muted-foreground">کاتالوگ B2B</span>
@@ -45,9 +42,7 @@ export default function Home() {
         <div className="gradient-bg absolute inset-0 opacity-20" />
         <div className="container relative z-10">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="mb-6 animate-slide-up">
-              <img src={logoUrl} alt="Savin Global Trade" className="h-20 w-20 mx-auto mb-4" />
-            </div>
+
             <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-slide-up">
               <span className="gradient-text">Savin Global Trade</span>
             </h1>

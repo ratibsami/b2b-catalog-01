@@ -30,8 +30,7 @@ export default function AdminSimple() {
   const [password, setPassword] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
 
-  const { data: logoSetting } = trpc.settings.get.useQuery({ key: "logo_url" });
-  const logoUrl = logoSetting?.value || "https://d2xsxph8kpxj0f.cloudfront.net/310519663355544748/YE3BoRZtdDkUr36qDCVcUW/savin-logo_41b96128.svg";
+
 
   // Check if user has admin session in localStorage
   useEffect(() => {
@@ -109,9 +108,7 @@ export default function AdminSimple() {
           <div className="bg-card border border-border rounded-2xl shadow-2xl p-8">
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="flex justify-center mb-4">
-                <img src={logoUrl} alt="Savin Global Trade" className="h-16 w-16" />
-              </div>
+  
               <h1 className="text-2xl font-bold gradient-text mb-2">Savin Global Trade</h1>
               <p className="text-sm text-muted-foreground mb-2">پنل مديريت</p>
               <p className="text-sm text-muted-foreground">لطفاً رمز عبور را وارد کنید</p>
@@ -159,7 +156,6 @@ export default function AdminSimple() {
       {/* Sidebar */}
       <div className="w-64 bg-card border-r border-border p-6 h-screen sticky top-0 overflow-y-auto">
         <div className="flex items-center gap-2 mb-6">
-          <img src={logoUrl} alt="Savin Global Trade" className="h-8 w-8" />
           <h2 className="text-lg font-bold gradient-text">Savin</h2>
         </div>
 

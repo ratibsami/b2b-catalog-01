@@ -128,3 +128,4 @@
 - [x] Update Catalog page to fetch logo from database
 - [x] Update Admin panel to fetch logo from database
 - [x] Write tests for logo upload functionality
+- [x] Remove logo images from all pages (display name only)
