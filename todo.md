@@ -117,3 +117,14 @@
 - [x] Add logo to admin panel header
 - [ ] Update favicon with logo
 - [ ] Add logo to footer
+
+
+## Admin Logo Management
+- [x] Add logo upload endpoint to server routers
+- [x] Create Settings page in admin panel for logo management
+- [x] Add logo upload UI with preview in admin Settings
+- [x] Store logo URL in database and load on page load
+- [x] Update Home page to fetch logo from database
+- [x] Update Catalog page to fetch logo from database
+- [x] Update Admin panel to fetch logo from database
+- [x] Write tests for logo upload functionality

@@ -15,6 +15,13 @@
       "when": 1774231512044,
       "tag": "0001_dusty_rage",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1774239579820,
+      "tag": "0002_new_human_fly",
+      "breakpoints": true
     }
   ]
 }

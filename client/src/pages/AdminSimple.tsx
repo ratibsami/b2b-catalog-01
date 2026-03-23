@@ -12,7 +12,8 @@ import {
   HelpCircle, 
   LogOut,
   Lock,
-  Loader2
+  Loader2,
+  Settings
 } from "lucide-react";
 import { toast } from "sonner";
 import AdminDashboard from "./admin/Dashboard";
@@ -21,12 +22,16 @@ import AdminCategories from "./admin/Categories";
 import AdminInquiries from "./admin/Inquiries";
 import AdminContent from "./admin/Content";
 import AdminFAQ from "./admin/FAQ";
+import AdminSettings from "./admin/Settings";
 
 export default function AdminSimple() {
   const [location, navigate] = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
+
+  const { data: logoSetting } = trpc.settings.get.useQuery({ key: "logo_url" });
+  const logoUrl = logoSetting?.value || "https://d2xsxph8kpxj0f.cloudfront.net/310519663355544748/YE3BoRZtdDkUr36qDCVcUW/savin-logo_41b96128.svg";
 
   // Check if user has admin session in localStorage
   useEffect(() => {
@@ -82,6 +87,7 @@ export default function AdminSimple() {
     { label: "درخواست‌ها", path: "/admin/inquiries", icon: MessageSquare },
     { label: "محتوا", path: "/admin/content", icon: FileText },
     { label: "سوالات متداول", path: "/admin/faq", icon: HelpCircle },
+    { label: "تنظیمات", path: "/admin/settings", icon: Settings },
   ];
 
   // Render different pages based on current location
@@ -91,6 +97,7 @@ export default function AdminSimple() {
     if (location.startsWith("/admin/inquiries")) return <AdminInquiries />;
     if (location.startsWith("/admin/content")) return <AdminContent />;
     if (location.startsWith("/admin/faq")) return <AdminFAQ />;
+    if (location.startsWith("/admin/settings")) return <AdminSettings />;
     return <AdminDashboard />;
   };
 
@@ -103,7 +110,7 @@ export default function AdminSimple() {
             {/* Header */}
             <div className="text-center mb-8">
               <div className="flex justify-center mb-4">
-                <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663355544748/YE3BoRZtdDkUr36qDCVcUW/savin-logo_41b96128.svg" alt="Savin Global Trade" className="h-16 w-16" />
+                <img src={logoUrl} alt="Savin Global Trade" className="h-16 w-16" />
               </div>
               <h1 className="text-2xl font-bold gradient-text mb-2">Savin Global Trade</h1>
               <p className="text-sm text-muted-foreground mb-2">پنل مديريت</p>
@@ -152,7 +159,7 @@ export default function AdminSimple() {
       {/* Sidebar */}
       <div className="w-64 bg-card border-r border-border p-6 h-screen sticky top-0 overflow-y-auto">
         <div className="flex items-center gap-2 mb-6">
-          <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663355544748/YE3BoRZtdDkUr36qDCVcUW/savin-logo_41b96128.svg" alt="Savin Global Trade" className="h-8 w-8" />
+          <img src={logoUrl} alt="Savin Global Trade" className="h-8 w-8" />
           <h2 className="text-lg font-bold gradient-text">Savin</h2>
         </div>
 

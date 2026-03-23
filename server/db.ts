@@ -9,12 +9,14 @@ import {
   inquiries,
   content,
   faqs,
+  settings,
   Category,
   Product,
   ProductImage,
   Inquiry,
   Content,
   FAQ,
+  Setting,
 } from "../drizzle/schema";
 import { ENV } from "./_core/env";
 
@@ -393,6 +395,34 @@ export async function updateFAQ(id: number, data: any) {
 export async function deleteFAQ(id: number) {
   const db = await getDb();
   if (!db) return undefined;
-
   return db.delete(faqs).where(eq(faqs.id, id));
+}
+
+// ========== Settings Helpers ==========
+export async function getSetting(key: string): Promise<Setting | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db
+    .select()
+    .from(settings)
+    .where(eq(settings.key, key))
+    .limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getAllSettings(): Promise<Setting[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(settings);
+}
+
+export async function updateSetting(key: string, value: string): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  const existing = await getSetting(key);
+  if (existing) {
+    await db.update(settings).set({ value }).where(eq(settings.key, key));
+  } else {
+    await db.insert(settings).values({ key, value });
+  }
 }

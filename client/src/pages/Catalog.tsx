@@ -19,6 +19,8 @@ export default function Catalog() {
   const [priceFilter, setPriceFilter] = useState<string>("all");
   const [availabilityFilter, setAvailabilityFilter] = useState<string>("all");
 
+  const { data: logoSetting } = trpc.settings.get.useQuery({ key: "logo_url" });
+  const logoUrl = logoSetting?.value || "https://d2xsxph8kpxj0f.cloudfront.net/310519663355544748/YE3BoRZtdDkUr36qDCVcUW/savin-logo_41b96128.svg";
   const { data: categories, isLoading: categoriesLoading } = trpc.categories.list.useQuery();
   const { data: allProducts, isLoading: productsLoading } =
     trpc.products.all.useQuery(undefined, { enabled: false });
@@ -74,7 +76,7 @@ export default function Catalog() {
         <div className="container">
           <div className="flex items-center gap-3 mb-4">
             <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition">
-              <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663355544748/YE3BoRZtdDkUr36qDCVcUW/savin-logo_41b96128.svg" alt="Savin Global Trade" className="h-6 w-6" />
+              <img src={logoUrl} alt="Savin Global Trade" className="h-6 w-6" />
               <span className="text-sm font-semibold gradient-text">Savin</span>
             </Link>
             <span className="text-muted-foreground">/</span>

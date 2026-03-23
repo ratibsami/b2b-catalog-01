@@ -157,3 +157,18 @@ export const faqs = mysqlTable("faqs", {
 
 export type FAQ = typeof faqs.$inferSelect;
 export type InsertFAQ = typeof faqs.$inferInsert;
+
+/**
+ * Settings for logo, branding, and site configuration
+ */
+export const settings = mysqlTable("settings", {
+  id: int("id").autoincrement().primaryKey(),
+  key: varchar("key", { length: 255 }).notNull().unique(),
+  value: longtext("value"),
+  description: text("description"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Setting = typeof settings.$inferSelect;
+export type InsertSetting = typeof settings.$inferInsert;

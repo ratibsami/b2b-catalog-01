@@ -423,8 +423,29 @@ export const appRouter = router({
       .input(z.object({ id: z.number() }))
       .mutation(async ({ input }) => {
         return db.deleteFAQ(input.id);
+       }),
+  }),
+
+  // ========== Settings Routes ==========
+  settings: router({
+    get: publicProcedure
+      .input(z.object({ key: z.string() }))
+      .query(async ({ input }) => {
+        return db.getSetting(input.key);
+      }),
+    all: adminProcedure.query(async () => {
+      return db.getAllSettings();
+    }),
+    update: adminProcedure
+      .input(
+        z.object({
+          key: z.string(),
+          value: z.string(),
+        })
+      )
+      .mutation(async ({ input }) => {
+        return db.updateSetting(input.key, input.value);
       }),
   }),
 });
-
 export type AppRouter = typeof appRouter;
