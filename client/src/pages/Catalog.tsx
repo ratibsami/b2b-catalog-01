@@ -1,6 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import React from "react";
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -12,16 +11,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Package, Search, ArrowRight } from "lucide-react";
+import { Package, Search, ArrowRight, Image as ImageIcon } from "lucide-react";
 
 export default function Catalog() {
-  const [, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [priceFilter, setPriceFilter] = useState<string>("all");
   const [availabilityFilter, setAvailabilityFilter] = useState<string>("all");
 
-  const { data: categories } = trpc.categories.list.useQuery();
+  const { data: categories, isLoading: categoriesLoading } = trpc.categories.list.useQuery();
   const { data: allProducts, isLoading: productsLoading } =
     trpc.products.all.useQuery(undefined, { enabled: false });
   const { data: searchResults } = trpc.products.search.useQuery(
@@ -65,7 +63,7 @@ export default function Catalog() {
 
   // Fetch all products when component mounts
   const { refetch: refetchProducts } = trpc.products.all.useQuery(undefined, { enabled: false });
-  React.useEffect(() => {
+  useEffect(() => {
     refetchProducts();
   }, [refetchProducts]);
 
@@ -88,6 +86,48 @@ export default function Catalog() {
           </p>
         </div>
       </div>
+
+      {/* Categories Section */}
+      {categories && categories.length > 0 && (
+        <div className="py-12 border-b border-border/50 bg-card/10">
+          <div className="container">
+            <h2 className="text-2xl font-bold mb-8">دسته‌بندی‌های محصولات</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {categories.map((category) => (
+                <Link key={category.id} href={`/catalog?category=${category.id}`}>
+                  <Card className="card-soft overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer h-full flex flex-col group">
+                    {/* Category Image */}
+                    <div className="relative w-full h-48 bg-gradient-to-br from-accent/10 to-accent/5 overflow-hidden">
+                      {category.bannerUrl ? (
+                        <img
+                          src={category.bannerUrl}
+                          alt={category.nameFa}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <ImageIcon className="h-12 w-12 text-muted-foreground/30" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Category Info */}
+                    <div className="p-6 flex-1 flex flex-col">
+                      <h3 className="text-lg font-bold mb-2 line-clamp-2">{category.nameFa}</h3>
+                      <p className="text-sm text-muted-foreground line-clamp-3 flex-1">
+                        {category.descriptionFa || category.descriptionEn}
+                      </p>
+                      <Button variant="outline" className="w-full mt-4">
+                        مشاهده محصولات
+                      </Button>
+                    </div>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Search and Filters */}
       <div className="border-b border-border/50 bg-card/20 py-6 sticky top-0 z-40">
