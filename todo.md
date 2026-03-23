@@ -136,3 +136,4 @@
 - [x] Update phone number to +8613012705854
 - [x] Update email to ratibsami360@gmail.com
 - [x] Update address to شنجزن - چین
+- [x] Update WhatsApp QR link to https://wa.me/qr/LDUZQ73FKIWUI1

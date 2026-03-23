@@ -253,7 +253,7 @@ export default function Home() {
               <h4 className="font-bold mb-4">ارتباط</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <a href="https://wa.me/8613012705854" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition">
+                  <a href="https://wa.me/qr/LDUZQ73FKIWUI1" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition">
                     واتس‌اپ
                   </a>
                 </li>

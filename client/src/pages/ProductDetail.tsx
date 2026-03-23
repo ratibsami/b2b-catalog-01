@@ -171,7 +171,7 @@ export default function ProductDetail() {
                     درخواست قیمت
                   </Button>
                 </Link>
-                <a href="https://wa.me/8613012705854" target="_blank" rel="noopener noreferrer">
+                <a href="https://wa.me/qr/LDUZQ73FKIWUI1" target="_blank" rel="noopener noreferrer">
                   <Button size="lg" variant="outline" className="w-full">
                     <Phone className="mr-2 h-4 w-4" />
                     واتس‌اپ

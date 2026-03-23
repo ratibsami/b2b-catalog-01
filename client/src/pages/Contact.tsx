@@ -128,7 +128,7 @@ export default function Contact() {
 
                 {/* WhatsApp */}
                   <a
-                    href="https://wa.me/8613012705854"
+                    href="https://wa.me/qr/LDUZQ73FKIWUI1"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block"
