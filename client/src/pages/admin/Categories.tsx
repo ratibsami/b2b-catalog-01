@@ -4,25 +4,28 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Edit2, Trash2, Loader2 } from "lucide-react";
+import { Plus, Edit2, Trash2, Loader2, Image as ImageIcon, X } from "lucide-react";
 import { toast } from "sonner";
 
 export default function AdminCategories() {
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     nameEn: "",
     nameFa: "",
     descriptionEn: "",
     descriptionFa: "",
     slug: "",
+    image: "",
   });
 
   const { data: categories, isLoading, refetch } = trpc.categories.all.useQuery();
   const createCategory = trpc.categories.create.useMutation({
     onSuccess: () => {
       toast.success("دسته‌بندی با موفقیت ایجاد شد");
-      setFormData({ nameEn: "", nameFa: "", descriptionEn: "", descriptionFa: "", slug: "" });
+      setFormData({ nameEn: "", nameFa: "", descriptionEn: "", descriptionFa: "", slug: "", image: "" });
+      setImagePreview(null);
       setIsCreating(false);
       refetch();
     },
@@ -37,6 +40,19 @@ export default function AdminCategories() {
     onError: (error) => toast.error("خطا: " + error.message),
   });
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setImagePreview(result);
+        setFormData({ ...formData, image: result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.nameEn || !formData.nameFa || !formData.slug) {
@@ -47,47 +63,92 @@ export default function AdminCategories() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="p-8 space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">مدیریت دسته‌بندی‌ها</h1>
+        <div>
+          <h1 className="text-4xl font-bold gradient-text mb-2">مدیریت دسته‌بندی‌ها</h1>
+          <p className="text-muted-foreground">دسته‌بندی‌های محصولات خود را مدیریت کنید</p>
+        </div>
         <Button
           onClick={() => setIsCreating(!isCreating)}
-          className="gap-2"
+          className="gap-2 h-12 px-6"
+          size="lg"
         >
-          <Plus className="h-4 w-4" />
+          <Plus className="h-5 w-5" />
           دسته‌بندی جدید
         </Button>
       </div>
 
       {/* Create Form */}
       {isCreating && (
-        <Card className="card-soft p-6">
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <Card className="card-soft p-8 border-2 border-accent/20">
+          <h2 className="text-2xl font-bold mb-6">دسته‌بندی جدید</h2>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Image Upload */}
+            <div>
+              <label className="block text-sm font-medium mb-3">تصویر دسته‌بندی</label>
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <label className="flex items-center justify-center w-full px-4 py-8 border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-accent/50 transition-colors">
+                    <div className="text-center">
+                      <ImageIcon className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                      <p className="text-sm font-medium">تصویر را انتخاب کنید</p>
+                      <p className="text-xs text-muted-foreground mt-1">PNG, JPG یا WebP</p>
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+                {imagePreview && (
+                  <div className="relative w-32 h-32 rounded-lg overflow-hidden border border-border">
+                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setImagePreview(null);
+                        setFormData({ ...formData, image: "" });
+                      }}
+                      className="absolute top-1 right-1 bg-destructive text-white p-1 rounded-full hover:bg-destructive/90"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-2">نام (انگلیسی)</label>
+                <label className="block text-sm font-medium mb-2">نام (انگلیسی) *</label>
                 <Input
                   value={formData.nameEn}
                   onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })}
                   placeholder="Category Name"
+                  className="h-10"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">نام (فارسی)</label>
+                <label className="block text-sm font-medium mb-2">نام (فارسی) *</label>
                 <Input
                   value={formData.nameFa}
                   onChange={(e) => setFormData({ ...formData, nameFa: e.target.value })}
                   placeholder="نام دسته‌بندی"
+                  className="h-10"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">Slug</label>
+              <label className="block text-sm font-medium mb-2">Slug *</label>
               <Input
                 value={formData.slug}
                 onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                 placeholder="category-slug"
+                className="h-10"
               />
             </div>
 
@@ -112,15 +173,20 @@ export default function AdminCategories() {
               </div>
             </div>
 
-            <div className="flex gap-2">
-              <Button type="submit" disabled={createCategory.isPending}>
+            <div className="flex gap-2 pt-4">
+              <Button type="submit" disabled={createCategory.isPending} size="lg">
                 {createCategory.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 ذخیره
               </Button>
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setIsCreating(false)}
+                onClick={() => {
+                  setIsCreating(false);
+                  setImagePreview(null);
+                  setFormData({ nameEn: "", nameFa: "", descriptionEn: "", descriptionFa: "", slug: "", image: "" });
+                }}
+                size="lg"
               >
                 لغو
               </Button>
@@ -129,40 +195,65 @@ export default function AdminCategories() {
         </Card>
       )}
 
-      {/* Categories List */}
+      {/* Categories Grid */}
       {isLoading ? (
         <div className="text-center py-12">
           <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
           <p className="text-muted-foreground">در حال بارگذاری...</p>
         </div>
       ) : categories && categories.length > 0 ? (
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((category) => (
-            <Card key={category.id} className="card-soft p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold mb-1">{category.nameFa}</h3>
-                  <p className="text-sm text-muted-foreground mb-2">{category.nameEn}</p>
-                  <p className="text-sm text-muted-foreground">{category.descriptionFa}</p>
+            <Card key={category.id} className="card-soft overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col">
+              {/* Category Image */}
+              <div className="relative w-full h-48 bg-gradient-to-br from-accent/10 to-accent/5 overflow-hidden">
+                {category.bannerUrl ? (
+                  <img
+                    src={category.bannerUrl}
+                    alt={category.nameFa}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <ImageIcon className="h-12 w-12 text-muted-foreground/30" />
+                  </div>
+                )}
+              </div>
+
+              {/* Category Info */}
+              <div className="p-6 flex-1 flex flex-col">
+                <h3 className="text-xl font-bold mb-1 line-clamp-2">{category.nameFa}</h3>
+                <p className="text-sm text-muted-foreground mb-3">{category.nameEn}</p>
+                <p className="text-sm text-muted-foreground mb-4 line-clamp-2 flex-1">
+                  {category.descriptionFa || category.descriptionEn}
+                </p>
+                <div className="text-xs text-muted-foreground/60 mb-4 pb-4 border-t border-border/30">
+                  <p className="mt-3">Slug: <span className="font-mono">{category.slug}</span></p>
                 </div>
+
+                {/* Action Buttons */}
                 <div className="flex gap-2">
                   <Button
                     size="sm"
                     variant="outline"
+                    className="flex-1"
                     onClick={() => setEditingId(category.id)}
                   >
-                    <Edit2 className="h-4 w-4" />
+                    <Edit2 className="h-4 w-4 ml-2" />
+                    ویرایش
                   </Button>
                   <Button
                     size="sm"
                     variant="destructive"
+                    className="flex-1"
                     onClick={() => {
                       if (confirm("آیا مطمئن هستید؟")) {
                         deleteCategory.mutate({ id: category.id });
                       }
                     }}
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-4 w-4 ml-2" />
+                    حذف
                   </Button>
                 </div>
               </div>
@@ -171,8 +262,11 @@ export default function AdminCategories() {
         </div>
       ) : (
         <Card className="card-soft p-12 text-center">
-          <p className="text-muted-foreground mb-4">هیچ دسته‌بندی‌ای یافت نشد</p>
-          <Button onClick={() => setIsCreating(true)}>دسته‌بندی اول را ایجاد کنید</Button>
+          <ImageIcon className="h-16 w-16 mx-auto mb-4 text-muted-foreground/30" />
+          <p className="text-muted-foreground mb-4 text-lg">هیچ دسته‌بندی‌ای یافت نشد</p>
+          <Button onClick={() => setIsCreating(true)} size="lg">
+            دسته‌بندی اول را ایجاد کنید
+          </Button>
         </Card>
       )}
     </div>
