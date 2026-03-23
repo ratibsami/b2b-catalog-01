@@ -11,11 +11,17 @@ export default function AdminLogin() {
   const [, navigate] = useLocation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const utils = trpc.useUtils();
 
   const login = trpc.adminAuth.login.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
+      // Invalidate the checkSession query to force a refresh
+      await utils.adminAuth.checkSession.invalidate();
       toast.success("خوش آمدید به پنل ادمین");
-      navigate("/admin");
+      // Add a small delay to ensure cookie is set
+      setTimeout(() => {
+        navigate("/admin");
+      }, 300);
     },
     onError: (error) => {
       toast.error("خطا: " + error.message);
