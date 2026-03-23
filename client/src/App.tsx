@@ -10,7 +10,7 @@ import ProductDetail from "./pages/ProductDetail";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import FAQ from "./pages/FAQ";
-import Admin from "./pages/Admin";
+import AdminSimple from "./pages/AdminSimple";
 import AdminLogin from "./pages/AdminLogin";
 
 function Router() {
@@ -23,7 +23,7 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/faq" component={FAQ} />
       <Route path="/admin/login" component={AdminLogin} />
-      <Route path="/admin/:path*" component={Admin} />
+      <Route path="/admin/:path*" component={AdminSimple} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
