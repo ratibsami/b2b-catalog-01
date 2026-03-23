@@ -129,3 +129,4 @@
 - [x] Update Admin panel to fetch logo from database
 - [x] Write tests for logo upload functionality
 - [x] Remove logo images from all pages (display name only)
+- [x] Remove team section from About page

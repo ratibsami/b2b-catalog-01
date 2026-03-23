@@ -92,42 +92,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* Team */}
-      <section className="py-16 md:py-24">
-        <div className="container">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">تیم ما</h2>
-          <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-12">
-            تیم متخصص ما متشکل از حرفه‌ای‌های با تجربه در زمینه‌های مختلف است که برای ارائه بهترین خدمات
-            متعهد هستند.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "علی محمدی",
-                role: "مدیر عمومی",
-                bio: "با ۱۵ سال تجربه در صنعت تجارت الکترونیک",
-              },
-              {
-                name: "فاطمه رضایی",
-                role: "مدیر فنی",
-                bio: "متخصص در توسعه سیستم‌های پیشرفته",
-              },
-              {
-                name: "محمد حسینی",
-                role: "مدیر فروش",
-                bio: "متخصص در رابطه‌های مشتری و توسعه کسب‌وکار",
-              },
-            ].map((member, index) => (
-              <Card key={index} className="card-soft p-6 text-center">
-                <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full mx-auto mb-4" />
-                <h3 className="text-lg font-bold mb-1">{member.name}</h3>
-                <p className="text-accent text-sm font-semibold mb-2">{member.role}</p>
-                <p className="text-muted-foreground text-sm">{member.bio}</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       {/* CTA */}
       <section className="py-16 md:py-24 bg-card/30 border-t border-border/50">
