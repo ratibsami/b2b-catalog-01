@@ -36,7 +36,13 @@ export default function AdminSimple() {
     setIsLoading(false);
   }, [sessionData]);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!isLoading && !sessionData?.isAuthenticated) {
+      navigate("/admin/login");
+    }
+  }, [isLoading, sessionData?.isAuthenticated, navigate]);
+
+  if (isLoading || !sessionData?.isAuthenticated) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -45,11 +51,6 @@ export default function AdminSimple() {
         </div>
       </div>
     );
-  }
-
-  if (!sessionData?.isAuthenticated) {
-    navigate("/admin/login");
-    return null;
   }
 
   const navItems = [

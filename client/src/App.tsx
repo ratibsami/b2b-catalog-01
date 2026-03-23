@@ -23,7 +23,12 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/faq" component={FAQ} />
       <Route path="/admin/login" component={AdminLogin} />
-      <Route path="/admin/:path*" component={AdminSimple} />
+      <Route path="/admin" component={AdminSimple} />
+      <Route path="/admin/products" component={AdminSimple} />
+      <Route path="/admin/categories" component={AdminSimple} />
+      <Route path="/admin/inquiries" component={AdminSimple} />
+      <Route path="/admin/content" component={AdminSimple} />
+      <Route path="/admin/faq" component={AdminSimple} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
