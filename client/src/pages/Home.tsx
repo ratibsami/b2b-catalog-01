@@ -7,7 +7,6 @@ import { ArrowLeft, Zap, Shield, TrendingUp, Users, Package, Headphones } from "
 import { getLoginUrl } from "@/const";
 
 export default function Home() {
-  const { user, isAuthenticated } = useAuth();
   const { data: categories, isLoading: categoriesLoading } = trpc.categories.list.useQuery();
 
   return (
@@ -32,11 +31,6 @@ export default function Home() {
             <Link href="/contact" className="text-sm hover:text-accent transition">
               تماس
             </Link>
-            {isAuthenticated ? (
-              <Link href="/admin" className="text-sm hover:text-accent transition">
-                پنل ادمین
-              </Link>
-            ) : null}
           </div>
         </div>
       </nav>

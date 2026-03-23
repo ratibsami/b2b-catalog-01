@@ -80,3 +80,9 @@
 - [x] Protect admin routes with authentication check
 - [x] Create admin credentials in database
 - [x] Test login flow and session persistence
+
+
+## Current Bugs to Fix
+- [x] Fix admin panel 404 error when accessing /admin/categories and other sub-pages
+- [x] Remove "پنل ادمین" button from header navigation
+- [x] Ensure admin pages render correctly after login

@@ -1,7 +1,7 @@
 import { useLocation } from "wouter";
 import { useEffect, useState } from "react";
 import { trpc } from "@/lib/trpc";
-import DashboardLayout from "@/components/DashboardLayout";
+import AdminLayout from "@/components/AdminLayout";
 import AdminDashboard from "./admin/Dashboard";
 import AdminProducts from "./admin/Products";
 import AdminCategories from "./admin/Categories";
@@ -36,17 +36,17 @@ export default function Admin() {
 
   // Render different pages based on current location
   const renderPage = () => {
-    if (location === "/admin/products") return <AdminProducts />;
-    if (location === "/admin/categories") return <AdminCategories />;
-    if (location === "/admin/inquiries") return <AdminInquiries />;
-    if (location === "/admin/content") return <AdminContent />;
-    if (location === "/admin/faq") return <AdminFAQ />;
+    if (location.startsWith("/admin/products")) return <AdminProducts />;
+    if (location.startsWith("/admin/categories")) return <AdminCategories />;
+    if (location.startsWith("/admin/inquiries")) return <AdminInquiries />;
+    if (location.startsWith("/admin/content")) return <AdminContent />;
+    if (location.startsWith("/admin/faq")) return <AdminFAQ />;
     return <AdminDashboard />;
   };
 
   return (
-    <DashboardLayout>
+    <AdminLayout>
       {renderPage()}
-    </DashboardLayout>
+    </AdminLayout>
   );
 }
