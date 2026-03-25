@@ -18,7 +18,13 @@ const redirectToLoginIfUnauthorized = (error: unknown) => {
 
   if (!isUnauthorized) return;
 
-  window.location.href = getLoginUrl();
+  // Only redirect to login if user is on an admin page
+  const currentPath = window.location.pathname;
+  const isAdminPage = currentPath.startsWith('/admin');
+  
+  if (isAdminPage) {
+    window.location.href = getLoginUrl();
+  }
 };
 
 queryClient.getQueryCache().subscribe(event => {

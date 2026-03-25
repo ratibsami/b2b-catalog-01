@@ -137,3 +137,7 @@
 - [x] Update email to ratibsami360@gmail.com
 - [x] Update address to شنجزن - چین
 - [x] Update WhatsApp QR link to https://wa.me/qr/LDUZQ73FKIWUI1
+- [x] Fix main.tsx to not redirect public pages to login
+- [x] Add CORS middleware to allow public image access
+- [x] Fix package.json syntax errors
+- [x] Fix index.html empty script tag
