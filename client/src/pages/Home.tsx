@@ -9,6 +9,7 @@ import { useState } from "react";
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showAllCategories, setShowAllCategories] = useState(false);
   const { data: categories, isLoading: categoriesLoading } = trpc.categories.list.useQuery();
 
   return (
@@ -127,25 +128,34 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {categories?.slice(0, 3).map((category) => (
-                <Link key={category.id} href={`/catalog?category=${category.slug}`}>
-                  <Card className="card-soft p-6 hover-lift cursor-pointer h-full flex flex-col justify-between">
-                    {category.bannerUrl && (
-                      <img
-                        src={category.bannerUrl}
-                        alt={category.nameFa}
-                        className="w-full h-32 object-cover rounded-lg mb-4"
-                      />
-                    )}
-                    <div>
-                      <h3 className="text-xl font-bold mb-2">{category.nameFa}</h3>
-                      <p className="text-sm text-muted-foreground">{category.descriptionFa}</p>
-                    </div>
-                  </Card>
-                </Link>
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {categories?.slice(0, 3).map((category) => (
+                  <Link key={category.id} href={`/catalog?category=${category.slug}`}>
+                    <Card className="card-soft p-6 hover-lift cursor-pointer h-full flex flex-col justify-between">
+                      {category.bannerUrl && (
+                        <img
+                          src={category.bannerUrl}
+                          alt={category.nameFa}
+                          className="w-full h-32 object-cover rounded-lg mb-4"
+                        />
+                      )}
+                      <div>
+                        <h3 className="text-xl font-bold mb-2">{category.nameFa}</h3>
+                        <p className="text-sm text-muted-foreground">{category.descriptionFa}</p>
+                      </div>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
+              {categories && categories.length > 3 && (
+                <div className="flex justify-center mt-8">
+                  <Button onClick={() => setShowAllCategories(true)} variant="outline" size="lg">
+                    مشاهده همه دسته‌بندی‌ها
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
@@ -214,6 +224,47 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* All Categories Modal */}
+      {showAllCategories && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <Card className="card-soft w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-border/50 flex items-center justify-between sticky top-0 bg-background/95 backdrop-blur-sm">
+              <h2 className="text-2xl font-bold">تمام دسته‌بندی‌ها</h2>
+              <button
+                onClick={() => setShowAllCategories(false)}
+                className="p-2 hover:bg-accent/10 rounded-lg transition"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {categories?.map((category) => (
+                  <Link key={category.id} href={`/catalog?category=${category.slug}`}>
+                    <Card
+                      className="card-soft p-6 hover-lift cursor-pointer h-full flex flex-col justify-between"
+                      onClick={() => setShowAllCategories(false)}
+                    >
+                      {category.bannerUrl && (
+                        <img
+                          src={category.bannerUrl}
+                          alt={category.nameFa}
+                          className="w-full h-32 object-cover rounded-lg mb-4"
+                        />
+                      )}
+                      <div>
+                        <h3 className="text-lg font-bold mb-2">{category.nameFa}</h3>
+                        <p className="text-sm text-muted-foreground">{category.descriptionFa}</p>
+                      </div>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="border-t border-border/50 bg-card/30 py-8">

@@ -142,3 +142,4 @@
 - [x] Fix package.json syntax errors
 - [x] Fix index.html empty script tag
 - [x] Change currency from Toman to Afghan Afghani
+- [x] Add View All Categories button to popular categories section
