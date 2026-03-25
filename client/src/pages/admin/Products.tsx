@@ -411,7 +411,7 @@ export default function AdminProducts() {
                 {/* Product Details */}
                 <div className="text-sm mb-4 pb-4 border-t border-border/30 pt-3 space-y-1">
                   <p>
-                    <span className="font-medium">قیمت:</span> {product.price?.toLocaleString()} تومان
+                    <span className="font-medium">قیمت:</span> {product.price?.toLocaleString()} افغانی
                   </p>
                   <p>
                     <span className="font-medium">موجودی:</span> {product.availability === "in_stock" ? "موجود" : product.availability === "limited" ? "محدود" : "ناموجود"}

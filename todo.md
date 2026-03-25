@@ -141,3 +141,4 @@
 - [x] Add CORS middleware to allow public image access
 - [x] Fix package.json syntax errors
 - [x] Fix index.html empty script tag
+- [x] Change currency from Toman to Afghan Afghani

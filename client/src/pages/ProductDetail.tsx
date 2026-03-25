@@ -119,7 +119,7 @@ export default function ProductDetail() {
                     <p className="text-4xl font-bold text-accent mb-4">
                       {parseFloat(product.price.toString()).toLocaleString()}
                     </p>
-                    <p className="text-sm text-muted-foreground">تومان</p>
+                    <p className="text-sm text-muted-foreground">افغانی</p>
                   </>
                 ) : (
                   <>

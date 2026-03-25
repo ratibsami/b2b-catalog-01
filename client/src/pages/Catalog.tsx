@@ -269,7 +269,7 @@ export default function Catalog() {
                         <div className="mt-auto space-y-2">
                           {!product.priceHidden && product.price && (
                             <p className="text-lg font-bold text-accent">
-                              {parseFloat(product.price.toString()).toLocaleString()} تومان
+                              {parseFloat(product.price.toString()).toLocaleString()} افغانی
                             </p>
                           )}
                           <div className="flex items-center justify-between text-xs">
